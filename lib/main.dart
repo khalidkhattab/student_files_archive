@@ -33,16 +33,35 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => ArchiveCubit(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData.dark().copyWith(
-          textTheme: GoogleFonts.cairoTextTheme(Theme.of(context).textTheme),
-
-
-        ),
-        home: const Directionality(textDirection: TextDirection.rtl,
-        child: MyHomePage()),
+      child: BlocConsumer<ArchiveCubit, CubitAssets>(
+        listener: (context, state) {
+          // TODO: implement listener
+        },
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Demo',
+            theme: ThemeData.light().copyWith(
+              textTheme:
+                  GoogleFonts.cairoTextTheme(Theme.of(context).textTheme.apply(
+                        bodyColor: Colors.black,
+                      )),
+              colorScheme: ColorScheme.fromSwatch().copyWith(
+                  primary: SiteColor.bgColor2, secondary: SiteColor.bgColor),
+            ),
+            darkTheme: ThemeData.dark().copyWith(
+              textTheme:
+                  GoogleFonts.cairoTextTheme(Theme.of(context).textTheme.apply(
+                        bodyColor: Colors.white,
+                      )),
+            ),
+            themeMode: ArchiveCubit.get(context).darkMode
+                ? ThemeMode.dark
+                : ThemeMode.light,
+            home: const Directionality(
+                textDirection: TextDirection.rtl, child: MyHomePage()),
+          );
+        },
       ),
     );
   }
@@ -60,9 +79,30 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return BlocConsumer<ArchiveCubit, CubitAssets>(builder: (context, status) {
       final cubit = ArchiveCubit.get(context);
-      return const Scaffold(
+      return Scaffold(
+        // drawer:
+        // Drawer(
+        //   child: ListView.builder(
+        //       itemCount: drawerItem.length,
+        //       itemBuilder: (context, index) {
+        //         return Card(
+        //           child: TextButton(
+        //               onPressed: () {}, child: Text(drawerItem[index])),
+        //         );
+        //       }),
+        // ),
+        appBar: AppBar(
+          title: const Text('ملفاتي'),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  cubit.darkModeOn();
+                },
+                icon: const Icon(Icons.sunny))
+          ],
+        ),
         body:
-            MainArchive(), //cubit.user!=null?const MainArchive():const LoginScreen(),
+            const MainArchive(), //cubit.user!=null?const MainArchive():const LoginScreen(),
       );
     }, listener: (context, status) {
       if (status is SignInWithEmailSuccessStatus) {

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ArchiveCubit extends Cubit<CubitAssets> {
   ArchiveCubit() : super(ArchiveInitStatus());
   static ArchiveCubit get(context) => BlocProvider.of(context);
-
+bool darkMode=true;
   User? user = FirebaseAuth.instance.currentUser;
 
   Future signInWithEmailAndPassword(
@@ -15,5 +15,10 @@ class ArchiveCubit extends Cubit<CubitAssets> {
     return FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) => emit(SignInWithEmailSuccessStatus()));
+  }
+
+  darkModeOn(){
+    darkMode=!darkMode;
+    emit(ThemeSwitchStatus());
   }
 }

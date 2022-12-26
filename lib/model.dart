@@ -26,3 +26,8 @@ class SiteColor{
   static Color bgColor2=const Color(0xff005faa);
   static Color bgColor3=const Color(0xff82c272);
 }
+
+List<String> drawerItem=[
+  'Class List',
+  'Add New','Move Student','New Arrive','Edit Student'
+];
