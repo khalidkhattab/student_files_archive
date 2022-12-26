@@ -1,10 +1,10 @@
-import 'package:filearchive/archive_home.dart';
 import 'package:filearchive/bloc/cubit.dart';
+import 'package:filearchive/pages/archive_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'bloc/cubit_assits.dart';
+import '../bloc/cubit_assits.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);

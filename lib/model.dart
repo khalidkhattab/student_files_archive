@@ -17,3 +17,12 @@ List<SiteItems> siteContent=[
   SiteItems(title:'Move Student', screen: const MyHomePage(), icon: Icons.move_to_inbox),
   SiteItems(title:'Edit Items', screen: const MyHomePage(), icon: Icons.edit),
 ];
+
+
+class SiteColor{
+  static Color mainColor=const Color(0xff0087Ac);
+  static Color sideBarColor=const Color(0xff323B81);
+  static Color bgColor=const Color(0xff00A88F);
+  static Color bgColor2=const Color(0xff005faa);
+  static Color bgColor3=const Color(0xff82c272);
+}

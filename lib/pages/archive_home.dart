@@ -25,8 +25,8 @@ class MainArchive extends StatelessWidget {
           );
         }),
       ),
-      appBar: AppBar(title:const Text('School Student Files'),),
-      body:const Center(child: Text('School Student Files'),),
+      appBar: AppBar(title:const Text('ملفاتي'),),
+      body:const Center(child: Text('ارشيف الملفات',style: TextStyle(color: Colors.white),)),
       floatingActionButton:FloatingActionButton(
         onPressed: () {
 
