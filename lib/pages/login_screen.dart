@@ -1,4 +1,5 @@
 import 'package:filearchive/bloc/cubit.dart';
+import 'package:filearchive/model.dart';
 import 'package:filearchive/pages/archive_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,94 +22,105 @@ class LoginScreen extends StatelessWidget {
             appBar: AppBar(
               // Here we take the value from the MyHomePage object that was created by
               // the App.build method, and use it to set our appbar title.
-              title: Text('Archive file'),
+              title:const  Text('Archive file'),
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      cubit.darkModeOn();
+                    },
+                    icon: const Icon(Icons.sunny))
+              ],
             ),
             body: Center(
               // Center is a layout widget. It takes a single child and positions it
               // in the middle of the parent.
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'File Archive',
-                    style: TextStyle(
-                        fontSize: 33,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.teal),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Card(
-                    child: SizedBox(
-                      width: kWidth > 800 ? 500 : kWidth * 0.7,
-                      height: 400,
-                      child: Column(
-                        // Column is also a layout widget. It takes a list of children and
-                        // arranges them vertically. By default, it sizes itself to fit its
-                        // children horizontally, and tries to be as tall as its parent.
-                        //
-                        // Invoke "debug painting" (press "p" in the console, choose the
-                        // "Toggle Debug Paint" action from the Flutter Inspector in Android
-                        // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-                        // to see the wireframe for each widget.
-                        //
-                        // Column has various properties to control how it sizes itself and
-                        // how it positions its children. Here we use mainAxisAlignment to
-                        // center the children vertically; the main axis here is the vertical
-                        // axis because Columns are vertical (the cross axis would be
-                        // horizontal).
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          TextFormArchive(emailController: emailController),
-                          TextFormArchive(emailController: passwordController),
-                          Visibility(
-                              visible: status is SignInWithEmailLoadingStatus,
-                              child: const CircularProgressIndicator()),
-                          Padding(
-                            padding: const EdgeInsets.all(30.0),
-                            child: MaterialButton(
-                              minWidth: 180,
-                              elevation: 10,
-                              height: 50,
-                              onPressed: () {
-
-                                try{
-                                  cubit.signInWithEmailAndPassword(
-                                      email: emailController.text,
-                                      password: passwordController.text);
-                                }on Exception catch (_){
-                                  print('e.toString()');
-                                }
-
-                              },
-                              color: Colors.teal,
-                              child: const Text(
-                                'Login',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
-                              ),
-                            ),
-                          )
-                        ],
+              child: SizedBox(
+                width: 700,
+                height: 450,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        
+                        color:SiteColor.bgColor
                       ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Container(
+                        color:SiteColor.bgColor3,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'File Archive',
+                              style: TextStyle(
+                                  fontSize: 33,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.teal),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            SizedBox(
+                              width: kWidth > 800 ? 500 : kWidth * 0.7,
+
+                              child: Column(
+
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  TextFormArchive(emailController: emailController),
+                                  TextFormArchive(emailController: passwordController),
+                                  Visibility(
+                                      visible: status is SignInWithEmailLoadingStatus,
+                                      child: const CircularProgressIndicator()),
+                                  Padding(
+                                    padding: const EdgeInsets.all(30.0),
+                                    child: MaterialButton(
+                                      minWidth: 180,
+                                      elevation: 10,
+                                      height: 50,
+                                      onPressed: () {
+
+                                        try{
+                                          cubit.signInWithEmailAndPassword(
+                                              email: emailController.text,
+                                              password: passwordController.text);
+                                        }on Exception catch (_){
+                                          print('e.toString()');
+                                        }
+
+                                      },
+                                      color: Colors.teal,
+                                      child: const Text(
+                                        'Login',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                FirebaseAuth.instance
-                    .signInWithEmailAndPassword(
-                    email: 'khattab832001@gmail.com', password: '295533')
-                    .then((value) => print(value.additionalUserInfo));
-              },
-              tooltip: 'Increment',
-              child: const Icon(Icons.add),
-            ), // This trailing comma makes auto-formatting nicer for build methods.
+            // floatingActionButton: FloatingActionButton(
+            //   onPressed: () {
+            //     FirebaseAuth.instance
+            //         .signInWithEmailAndPassword(
+            //         email: 'khattab832001@gmail.com', password: '295533')
+            //         .then((value) => print(value.additionalUserInfo));
+            //   },
+            //   tooltip: 'Increment',
+            //   child: const Icon(Icons.add),
+            // ), // This trailing comma makes auto-formatting nicer for build methods.
           );
         },
         listener: (context, status) {

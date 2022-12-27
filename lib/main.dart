@@ -2,6 +2,7 @@ import 'package:filearchive/bloc/bloc_observer.dart';
 import 'package:filearchive/bloc/cubit.dart';
 import 'package:filearchive/model.dart';
 import 'package:filearchive/pages/archive_home.dart';
+import 'package:filearchive/pages/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return BlocConsumer<ArchiveCubit, CubitAssets>(builder: (context, status) {
       final cubit = ArchiveCubit.get(context);
-      return Scaffold(
+      return  Scaffold(
         // drawer:
         // Drawer(
         //   child: ListView.builder(
@@ -91,18 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
         //         );
         //       }),
         // ),
-        appBar: AppBar(
-          title: const Text('ملفاتي'),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  cubit.darkModeOn();
-                },
-                icon: const Icon(Icons.sunny))
-          ],
-        ),
+
         body:
-            const MainArchive(), //cubit.user!=null?const MainArchive():const LoginScreen(),
+            cubit.user!=null?const MainArchive():const LoginScreen(),
       );
     }, listener: (context, status) {
       if (status is SignInWithEmailSuccessStatus) {
