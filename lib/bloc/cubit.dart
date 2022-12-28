@@ -7,6 +7,8 @@ class ArchiveCubit extends Cubit<CubitAssets> {
   ArchiveCubit() : super(ArchiveInitStatus());
   static ArchiveCubit get(context) => BlocProvider.of(context);
 bool darkMode=true;
+bool onBoardingDone=false;
+  bool onBoardingLess=true;
   User? user = FirebaseAuth.instance.currentUser;
 
   Future signInWithEmailAndPassword(
@@ -19,6 +21,30 @@ bool darkMode=true;
 
   darkModeOn(){
     darkMode=!darkMode;
+
     emit(ThemeSwitchStatus());
   }
+
+
+  onBoardingChange(double? page){
+
+    if(page==2){
+      onBoardingDone=true;
+
+    }else{
+      onBoardingDone=false;
+    }
+
+    if(page!=0){
+      onBoardingLess=false;
+    }else{
+      onBoardingLess=true;
+
+    }
+    emit(OnBoardingStatus());
+  }
+
+
 }
+
+

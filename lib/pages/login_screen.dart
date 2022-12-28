@@ -14,6 +14,10 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double kWidth = MediaQuery.of(context).size.width;
+    bool onBoardComplete=false;
+    PageController pageViewController = PageController(
+      initialPage: 0,
+    );
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     return BlocConsumer<ArchiveCubit, CubitAssets>(builder: (context, status) {
@@ -46,16 +50,9 @@ class LoginScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(
-                          'File Archive',
-                          style: GoogleFonts.lobster(
-                            fontSize: 33,
-                          ),
-
-                          //TextStyle(
-                          //                                   fontSize: 33,
-                          //                                   fontWeight: FontWeight.bold,
-                          //                                   color: Colors.white),
+                        const Text(
+                          'ملفاتي',
+                          style: TextStyle(fontSize: 25),
                         ),
                         Column(
                           children: [
@@ -82,7 +79,7 @@ class LoginScreen extends StatelessWidget {
                                 },
                                 color: Colors.teal,
                                 child: const Text(
-                                  'Login',
+                                  'دخول',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -100,50 +97,74 @@ class LoginScreen extends StatelessWidget {
                   child: Container(
                     color: SiteColor.bgColor3,
                     child: PageView(
-                      scrollDirection: Axis.horizontal,
+                        controller: pageViewController,
+                        scrollDirection: Axis.horizontal,
+                        children: onBoarding.map((e) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Spacer(),
+                              Text(
+                                e['title']!,
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                              Text(e['subject']!),
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Image(
+                                  image:
+                                      AssetImage('assets/images/${e['Image']}'),
+                                  width: 200,
+                                ),
+                              ),
+                              const Spacer(
+                                flex: 1,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    MaterialButton(
+                                      onPressed: cubit.onBoardingLess ?null:() {
+                                        pageViewController.previousPage(
+                                            duration: const Duration(
+                                                microseconds: 200),
+                                            curve: Curves.bounceIn).then((value){
+                                          cubit.onBoardingChange(pageViewController.page);
 
-                      children: [
-                        Container(
-                          color: Colors.yellow,
-                          child: Column(
-                            children: const [
-                              Text('File Archive3'),
-                              Image(image: AssetImage('assets/images/student.jpg'))
+                                        });
+                                      },
+                                      color: SiteColor.bgColor,
+                                      child: const Text('السابق'),
+                                    ),
+                                    MaterialButton(
+
+                                      onPressed: cubit.onBoardingDone?null:() {
+                                        pageViewController.nextPage(
+                                            duration: const Duration(
+                                                microseconds: 200),
+                                            curve: Curves.bounceIn).then((value) {
+                                          cubit.onBoardingChange(pageViewController.page);
+
+                                        });
+                                      },
+                                      color: SiteColor.bgColor,
+                                      child: const Text('التالي'),
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
-                          ),
-                        ),
-                        Container(
-                          child: Column(
-                            children: const [
-                              Text('File Archive1'),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Column(
-                            children: const [
-                              Text('File Archive2'),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                          );
+                        }).toList()),
                   ),
                 ),
               ],
             ),
           ),
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {
-        //     FirebaseAuth.instance
-        //         .signInWithEmailAndPassword(
-        //         email: 'khattab832001@gmail.com', password: '295533')
-        //         .then((value) => print(value.additionalUserInfo));
-        //   },
-        //   tooltip: 'Increment',
-        //   child: const Icon(Icons.add),
-        // ), // This trailing comma makes auto-formatting nicer for build methods.
       );
     }, listener: (context, status) {
       if (status is SignInWithEmailSuccessStatus) {

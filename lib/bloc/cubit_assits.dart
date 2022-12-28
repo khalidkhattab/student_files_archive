@@ -6,3 +6,5 @@ class SignInWithEmailSuccessStatus extends CubitAssets{}
 
 
 class ThemeSwitchStatus extends CubitAssets{}
+
+class OnBoardingStatus extends CubitAssets{}
