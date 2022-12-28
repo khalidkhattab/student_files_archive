@@ -24,7 +24,8 @@ class SiteColor{
   static Color sideBarColor=const Color(0xff323B81);
   static Color bgColor=const Color(0xff00A88F);
   static Color bgColor2=const Color(0xff005faa);
-  static Color bgColor3=const Color(0xff82c272);
+  static Color bgColor3=const Color(0xff82c272);//#82E0AA
+  static Color bgColor4=const Color(0xff82E0AA);
 }
 
 List<String> drawerItem=[
