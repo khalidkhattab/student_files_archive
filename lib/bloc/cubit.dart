@@ -28,7 +28,7 @@ bool onBoardingDone=false;
 
   onBoardingChange(double? page){
 
-    if(page==2){
+    if(page==3){
       onBoardingDone=true;
 
     }else{

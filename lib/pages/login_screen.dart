@@ -1,10 +1,8 @@
 import 'package:filearchive/bloc/cubit.dart';
 import 'package:filearchive/model.dart';
 import 'package:filearchive/pages/archive_home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../bloc/cubit_assits.dart';
 
@@ -14,7 +12,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double kWidth = MediaQuery.of(context).size.width;
-    bool onBoardComplete=false;
+
     PageController pageViewController = PageController(
       initialPage: 0,
     );
@@ -40,7 +38,7 @@ class LoginScreen extends StatelessWidget {
           // in the middle of the parent.
           child: Container(
             color: Colors.lightGreenAccent,
-            width: 700,
+            width: kWidth>1200?kWidth*.5:kWidth>1000?kWidth*.6:kWidth*.8,
             height: 450,
             child: Row(
               children: [
@@ -56,9 +54,9 @@ class LoginScreen extends StatelessWidget {
                         ),
                         Column(
                           children: [
-                            TextFormArchive(emailController: emailController),
+                            TextFormArchive(emailController: emailController, label: 'اسم المستخدم', password: false,),
                             TextFormArchive(
-                                emailController: passwordController),
+                                emailController: passwordController, label: 'كلمة المرور',password: true,),
                             Visibility(
                                 visible: status is SignInWithEmailLoadingStatus,
                                 child: const CircularProgressIndicator()),
@@ -87,78 +85,102 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            TextButton(onPressed: (){
+                              showDialog(context: context, builder: (context)=> AlertDialog(
+                                title:const Center(child:  Text('تنبيه')),
+                                content:Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children:const [
+                                     Text('لا يمكن اعادة تعين كلمة المرور من الموقع '),
+                                    Text('تواصل مع مسئول الموقع لاعادة تعينها'),
+
+                                  ],
+                                ),
+                                actions: [
+                                  MaterialButton(
+                                    onPressed: (){
+                                    Navigator.pop(context);
+                                  },
+                                  color: SiteColor.bgColor4,child:const Text('تم'),
+                                  )
+                                ],
+                              ));
+                            }, child: const Text('نسيت كلمة المرور؟'))
                           ],
                         )
                       ],
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    color: SiteColor.bgColor3,
-                    child: PageView(
-                        controller: pageViewController,
-                        scrollDirection: Axis.horizontal,
-                        children: onBoarding.map((e) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Spacer(),
-                              Text(
-                                e['title']!,
-                                style: const TextStyle(fontSize: 18),
-                              ),
-                              Text(e['subject']!),
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Image(
-                                  image:
-                                      AssetImage('assets/images/${e['Image']}'),
-                                  width: 200,
+                Visibility(
+                  visible: kWidth>900,
+                  child: Expanded(
+                    child: Container(
+                      color: SiteColor.bgColor3,
+                      child: PageView(
+                          controller: pageViewController,
+                          scrollDirection: Axis.horizontal,
+                          children: onBoarding.map((e) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                const Spacer(),
+                                Text(
+                                  e['title']!,
+                                  style: const TextStyle(fontSize: 18),
                                 ),
-                              ),
-                              const Spacer(
-                                flex: 1,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    MaterialButton(
-                                      onPressed: cubit.onBoardingLess ?null:() {
-                                        pageViewController.previousPage(
-                                            duration: const Duration(
-                                                microseconds: 200),
-                                            curve: Curves.bounceIn).then((value){
-                                          cubit.onBoardingChange(pageViewController.page);
-
-                                        });
-                                      },
-                                      color: SiteColor.bgColor,
-                                      child: const Text('السابق'),
-                                    ),
-                                    MaterialButton(
-
-                                      onPressed: cubit.onBoardingDone?null:() {
-                                        pageViewController.nextPage(
-                                            duration: const Duration(
-                                                microseconds: 200),
-                                            curve: Curves.bounceIn).then((value) {
-                                          cubit.onBoardingChange(pageViewController.page);
-
-                                        });
-                                      },
-                                      color: SiteColor.bgColor,
-                                      child: const Text('التالي'),
-                                    ),
-                                  ],
+                                Text(e['subject']!),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Image(
+                                    image:
+                                        AssetImage('assets/images/${e['Image']}'),
+                                    width: kWidth*.1,
+                                  ),
                                 ),
-                              )
-                            ],
-                          );
-                        }).toList()),
+                                const Spacer(
+                                  flex: 1,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      MaterialButton(
+                                        onPressed: cubit.onBoardingLess ?null:() {
+                                          pageViewController.previousPage(
+                                              duration: const Duration(
+                                                  microseconds: 200),
+                                              curve: Curves.easeInOutQuart).then((value){
+                                            cubit.onBoardingChange(pageViewController.page);
+
+                                          });
+                                        },
+                                        color: SiteColor.bgColor,
+                                        child: const Text('السابق'),
+                                      ),
+                                      MaterialButton(
+
+                                        onPressed: cubit.onBoardingDone?null:() {
+                                          pageViewController.nextPage(
+                                              duration: const Duration(
+                                                  microseconds: 200),
+                                              curve: Curves.elasticInOut).then((value) {
+                                            cubit.onBoardingChange(pageViewController.page);
+
+                                          });
+                                        },
+                                        color: SiteColor.bgColor,
+                                        child: const Text('التالي'),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            );
+                          }).toList()),
+                    ),
                   ),
                 ),
               ],
@@ -172,7 +194,7 @@ class LoginScreen extends StatelessWidget {
             MaterialPageRoute(builder: (context) => const MainArchive()));
       }
     });
-    ;
+
   }
 }
 
@@ -180,10 +202,13 @@ class TextFormArchive extends StatelessWidget {
   const TextFormArchive({
     Key? key,
     required this.emailController,
+    required this.label,
+    required this.password
   }) : super(key: key);
 
   final TextEditingController emailController;
-
+  final String label;
+  final bool password;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -195,8 +220,11 @@ class TextFormArchive extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             child: TextFormField(
+obscureText: password,
               controller: emailController,
-              decoration: const InputDecoration(
+              decoration:  InputDecoration(
+
+                label:Text(label) ,
                 border: InputBorder.none,
               ),
             ),

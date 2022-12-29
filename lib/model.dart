@@ -34,7 +34,7 @@ List<String> drawerItem=[
 ];
 
 List<Map<String, String>> onBoarding=[
-  {"title":"موقع ملفاتي","subject":"موقع مختص بالتعامل مع ملفات طلاب المدرسة","Image":"fileSite.jpg"},
+  {"title":"موقع ملفاتي","subject":"موقع مختص بالتعامل مع ملفات طلاب المدرسة","Image":"mangeFile.png"},
   {"title":"رفع ملفات","subject":"رفع ملفات الطلاب في مكان واحد و استعراضها في اي مكان","Image":"upLoadFile.png"},
   {"title":"نقل ملفات","subject":"نقل الملفات بين المدارس في ثوان معدودة","Image":"moveFile.png"},
   {"title":"ادارة ملفات","subject":"ادارة الملفات بسرعة و سهولة","Image":"mangeFile.png"},

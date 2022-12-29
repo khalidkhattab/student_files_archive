@@ -1,6 +1,7 @@
 import 'package:filearchive/bloc/cubit.dart';
 import 'package:filearchive/bloc/cubit_assits.dart';
 import 'package:filearchive/main.dart';
+import 'package:filearchive/model.dart';
 import 'package:filearchive/pages/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,27 +22,48 @@ class MainArchive extends StatelessWidget {
   },
   builder: (context, state) {
     final cubit=ArchiveCubit.get(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('ملفاتي'),
-        actions: [
-          IconButton(
-              onPressed: () {
-                cubit.darkModeOn();
-              },
-              icon: const Icon(Icons.sunny)),
-          IconButton(onPressed: (){
-            FirebaseAuth.instance.signOut().then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginScreen())));
-          }, icon:const Icon(Icons.exit_to_app))
-        ],
-      ),
-      body:const Center(child: Text('ارشيف الملفات',)),
-      floatingActionButton:FloatingActionButton(
-        onPressed: () {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('ملفاتي'),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  cubit.darkModeOn();
+                },
+                icon: const Icon(Icons.sunny)),
+            IconButton(onPressed: (){
+              FirebaseAuth.instance.signOut().then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginScreen())));
+            }, icon:const Icon(Icons.exit_to_app))
+          ],
+        ),
+        body:Row(children: [
+          Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Container(color: SiteColor.sideBarColor,
+                child: Column(children: const [
+                 Card(child:   SizedBox(
+                     width: double.infinity,
+                     child:Center(child: Text('ملفاتي', style: TextStyle(fontSize: 20),)))),
+                  
 
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+                ],),
+                ),
+              )),
+          Expanded(
+              flex:7,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+            color: SiteColor.bgColor2,
+          ),
+              ))
+        ],),
+
+
       ),
     );
   },
