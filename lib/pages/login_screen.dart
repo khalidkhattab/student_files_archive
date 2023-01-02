@@ -1,6 +1,8 @@
 import 'package:filearchive/bloc/cubit.dart';
 import 'package:filearchive/model.dart';
 import 'package:filearchive/pages/archive_home.dart';
+import 'package:filearchive/pages/component.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,6 +22,7 @@ class LoginScreen extends StatelessWidget {
     TextEditingController passwordController = TextEditingController();
     return BlocConsumer<ArchiveCubit, CubitAssets>(builder: (context, status) {
       final cubit = ArchiveCubit.get(context);
+      final  formKey=GlobalKey<FormState>();
       return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -38,82 +41,103 @@ class LoginScreen extends StatelessWidget {
           // in the middle of the parent.
           child: Container(
             color: Colors.lightGreenAccent,
-            width: kWidth>1200?kWidth*.5:kWidth>1000?kWidth*.6:kWidth*.8,
+            width: kWidth > 1200
+                ? kWidth * .5
+                : kWidth > 1000
+                    ? kWidth * .6
+                    : kWidth * .8,
             height: 450,
             child: Row(
               children: [
                 Expanded(
-                  child: Container(
-                    color: SiteColor.bgColor4,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Text(
-                          'ملفاتي',
-                          style: TextStyle(fontSize: 25),
-                        ),
-                        Column(
-                          children: [
-                            TextFormArchive(emailController: emailController, label: 'اسم المستخدم', password: false,),
-                            TextFormArchive(
-                                emailController: passwordController, label: 'كلمة المرور',password: true,),
-                            Visibility(
-                                visible: status is SignInWithEmailLoadingStatus,
-                                child: const CircularProgressIndicator()),
-                            Padding(
-                              padding: const EdgeInsets.all(30.0),
-                              child: MaterialButton(
-                                minWidth: 180,
-                                elevation: 10,
-                                height: 50,
-                                onPressed: () {
-                                  try {
-                                    cubit.signInWithEmailAndPassword(
-                                        email: emailController.text,
-                                        password: passwordController.text);
-                                  } on Exception catch (_) {
-                                    print('e.toString()');
-                                  }
-                                },
-                                color: Colors.teal,
-                                child: const Text(
-                                  'دخول',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
+                  child: Form(
+                    key: formKey,
+                    child: Container(
+                      color: SiteColor.bgColor4,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const Text(
+                            'ملفاتي',
+                            style: TextStyle(fontSize: 25),
+                          ),
+                          Column(
+                            children: [
+                              TextFormArchive(
+                                emailController: emailController,
+                                label: 'اسم المستخدم',
+                                password: false,
+                              ),
+                              TextFormArchive(
+                                emailController: passwordController,
+                                label: 'كلمة المرور',
+                                password: true,
+                              ),
+                              Visibility(
+                                  visible: status is SignInWithEmailLoadingStatus,
+                                  child: const CircularProgressIndicator()),
+                              Padding(
+                                padding: const EdgeInsets.all(30.0),
+                                child: MaterialButton(
+                                  minWidth: 180,
+                                  elevation: 10,
+                                  height: 50,
+                                  onPressed: () {
+                                   if(formKey.currentState!.validate()){
+                                     cubit.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text).then((value){
+                                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const MainArchive()));
+
+                                     });
+
+                                   }
+                                  },
+                                  color: Colors.teal,
+                                  child: const Text(
+                                    'دخول',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
                                 ),
                               ),
-                            ),
-                            TextButton(onPressed: (){
-                              showDialog(context: context, builder: (context)=> AlertDialog(
-                                title:const Center(child:  Text('تنبيه')),
-                                content:Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children:const [
-                                     Text('لا يمكن اعادة تعين كلمة المرور من الموقع '),
-                                    Text('تواصل مع مسئول الموقع لاعادة تعينها'),
+                              TextButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => SiteAlert(
 
-                                  ],
-                                ),
-                                actions: [
-                                  MaterialButton(
-                                    onPressed: (){
-                                    Navigator.pop(context);
+                                          subject: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: const [
+                                              Text(
+                                                  'لا يمكن اعادة تعين كلمة المرور من الموقع '),
+                                              Text(
+                                                  'تواصل مع مسئول الموقع لاعادة تعينها'),
+                                            ],
+                                          ),
+                                          title: 'تنبية',
+                                          action: [
+                                            MaterialButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              color: SiteColor.bgColor4,
+                                              child: const Text('تم'),
+                                            )
+                                          ],
+                                        ));
                                   },
-                                  color: SiteColor.bgColor4,child:const Text('تم'),
-                                  )
-                                ],
-                              ));
-                            }, child: const Text('نسيت كلمة المرور؟'))
-                          ],
-                        )
-                      ],
+                                  child: const Text('نسيت كلمة المرور؟'))
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 Visibility(
-                  visible: kWidth>900,
+                  visible: kWidth > 900,
                   child: Expanded(
                     child: Container(
                       color: SiteColor.bgColor3,
@@ -133,9 +157,9 @@ class LoginScreen extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Image(
-                                    image:
-                                        AssetImage('assets/images/${e['Image']}'),
-                                    width: kWidth*.1,
+                                    image: AssetImage(
+                                        'assets/images/${e['Image']}'),
+                                    width: kWidth * .1,
                                   ),
                                 ),
                                 const Spacer(
@@ -148,29 +172,42 @@ class LoginScreen extends StatelessWidget {
                                         MainAxisAlignment.spaceAround,
                                     children: [
                                       MaterialButton(
-                                        onPressed: cubit.onBoardingLess ?null:() {
-                                          pageViewController.previousPage(
-                                              duration: const Duration(
-                                                  microseconds: 200),
-                                              curve: Curves.easeInOutQuart).then((value){
-                                            cubit.onBoardingChange(pageViewController.page);
-
-                                          });
-                                        },
+                                        onPressed: cubit.onBoardingLess
+                                            ? null
+                                            : () {
+                                                pageViewController
+                                                    .previousPage(
+                                                        duration:
+                                                            const Duration(
+                                                                microseconds:
+                                                                    200),
+                                                        curve: Curves
+                                                            .easeInOutQuart)
+                                                    .then((value) {
+                                                  cubit.onBoardingChange(
+                                                      pageViewController.page);
+                                                });
+                                              },
                                         color: SiteColor.bgColor,
                                         child: const Text('السابق'),
                                       ),
                                       MaterialButton(
-
-                                        onPressed: cubit.onBoardingDone?null:() {
-                                          pageViewController.nextPage(
-                                              duration: const Duration(
-                                                  microseconds: 200),
-                                              curve: Curves.elasticInOut).then((value) {
-                                            cubit.onBoardingChange(pageViewController.page);
-
-                                          });
-                                        },
+                                        onPressed: cubit.onBoardingDone
+                                            ? null
+                                            : () {
+                                                pageViewController
+                                                    .nextPage(
+                                                        duration:
+                                                            const Duration(
+                                                                microseconds:
+                                                                    200),
+                                                        curve:
+                                                            Curves.elasticInOut)
+                                                    .then((value) {
+                                                  cubit.onBoardingChange(
+                                                      pageViewController.page);
+                                                });
+                                              },
                                         color: SiteColor.bgColor,
                                         child: const Text('التالي'),
                                       ),
@@ -194,17 +231,18 @@ class LoginScreen extends StatelessWidget {
             MaterialPageRoute(builder: (context) => const MainArchive()));
       }
     });
-
   }
 }
 
+
+
 class TextFormArchive extends StatelessWidget {
-  const TextFormArchive({
-    Key? key,
-    required this.emailController,
-    required this.label,
-    required this.password
-  }) : super(key: key);
+  const TextFormArchive(
+      {Key? key,
+      required this.emailController,
+      required this.label,
+      required this.password})
+      : super(key: key);
 
   final TextEditingController emailController;
   final String label;
@@ -220,11 +258,16 @@ class TextFormArchive extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             child: TextFormField(
-obscureText: password,
+              validator:(value){
+                if(value == null || value.isEmpty){
+                  return 'يجب ادخال اسم المستخدم و كلمة المرور';
+                }
+                return null;
+              },
+              obscureText: password,
               controller: emailController,
-              decoration:  InputDecoration(
-
-                label:Text(label) ,
+              decoration: InputDecoration(
+                label: Text(label),
                 border: InputBorder.none,
               ),
             ),

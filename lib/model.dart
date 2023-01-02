@@ -21,9 +21,9 @@ List<SiteItems> siteContent=[
 
 class SiteColor{
   static Color mainColor=const Color(0xff0087Ac);
-  static Color sideBarColor=const Color(0xff323B81);
+  static Color sideBarColor=const Color(0xff2980B9);
   static Color bgColor=const Color(0xff00A88F);
-  static Color bgColor2=const Color(0xff005faa);
+  static Color bgColor2=const Color(0xffAEB6BF);
   static Color bgColor3=const Color(0xff82c272);//#82E0AA
   static Color bgColor4=const Color(0xff82E0AA);
 }
