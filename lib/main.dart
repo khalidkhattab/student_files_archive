@@ -1,6 +1,6 @@
 import 'package:filearchive/bloc/bloc_observer.dart';
 import 'package:filearchive/bloc/cubit.dart';
-import 'package:filearchive/model.dart';
+import 'package:filearchive/model/model.dart';
 import 'package:filearchive/pages/archive_home.dart';
 import 'package:filearchive/pages/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';

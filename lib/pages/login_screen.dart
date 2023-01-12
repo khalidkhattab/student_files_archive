@@ -1,5 +1,5 @@
 import 'package:filearchive/bloc/cubit.dart';
-import 'package:filearchive/model.dart';
+import 'package:filearchive/model/model.dart';
 import 'package:filearchive/pages/archive_home.dart';
 import 'package:filearchive/pages/component.dart';
 import 'package:firebase_auth/firebase_auth.dart';

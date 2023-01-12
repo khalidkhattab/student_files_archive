@@ -1,8 +1,9 @@
 import 'package:filearchive/bloc/cubit.dart';
 import 'package:filearchive/bloc/cubit_assits.dart';
 import 'package:filearchive/main.dart';
-import 'package:filearchive/model.dart';
+import 'package:filearchive/model/model.dart';
 import 'package:filearchive/pages/component.dart';
+import 'package:filearchive/pages/dashboard.dart';
 import 'package:filearchive/pages/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,17 +28,17 @@ class MainArchive extends StatelessWidget {
       },
       builder: (context, state) {
         final cubit = ArchiveCubit.get(context);
+        double kWidth=MediaQuery.of(context).size.width;
         return Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
             body: Row(
               children: [
                 Expanded(
-                    flex: 1,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Container(
-                        color: SiteColor.sideBarColor,
+                        color: SiteColor.bgColor,
                         child: Column(
                           children: [
                             const Card(
@@ -48,9 +49,29 @@ class MainArchive extends StatelessWidget {
                                       'ملفاتي',
                                       style: TextStyle(fontSize: 20),
                                     )))),
+                            const SizedBox(height: 100,),
                             Expanded(
-                                child: Container(
-                              color: Colors.blueGrey,
+                                child:  SizedBox(
+                                  child: ListView.builder(
+                                      itemCount: sideBarItem.length,
+                                      itemBuilder: (context, index){
+                                    return SizedBox(
+                                        height: 80,
+
+                                        child:ListTile(
+                                          onTap: (){
+                                            cubit.changePage(index: index);
+                                          },
+                                          title: sideBarItem[index]['Title'],
+                                          leading: sideBarItem[index]['Icon'] ,
+                                            minLeadingWidth:0,
+
+                                          trailing:Visibility(
+                                              visible:kWidth>1500 ,
+                                              child:  const Icon(Icons.arrow_forward_ios))),
+                                        );
+
+                                  }),
                             )),
                             Card(
                                 child: SizedBox(
@@ -107,30 +128,9 @@ class MainArchive extends StatelessWidget {
                         ),
                       ),
                     )),
-                Expanded(
-                    flex: 7,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Container(
-                        color: SiteColor.bgColor2,
-                        child: Column(children: [
-                          Row(children: [
-                            Expanded(child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Card(child: Container(height: 160,),),
-                            )),
-                            Expanded(child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Card(child: Container(height: 160,),),
-                            )),
-                            Expanded(child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Card(child: Container(height: 160,),),
-                            ))
-                          ],)
-                        ],),
-                      ),
-                    ))
+                 Expanded(
+                    flex: 6,
+                    child:siteContent[cubit.currentPage].screen,)
               ],
             ),
           ),
@@ -139,3 +139,6 @@ class MainArchive extends StatelessWidget {
     );
   }
 }
+
+
+
