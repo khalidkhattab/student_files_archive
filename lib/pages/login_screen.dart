@@ -2,7 +2,6 @@ import 'package:filearchive/bloc/cubit.dart';
 import 'package:filearchive/model/model.dart';
 import 'package:filearchive/pages/archive_home.dart';
 import 'package:filearchive/pages/component.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -64,14 +63,16 @@ class LoginScreen extends StatelessWidget {
                           Column(
                             children: [
                               TextFormArchive(
-                                emailController: emailController,
+                                controller: emailController,
                                 label: 'اسم المستخدم',
                                 password: false,
+                                alert: 'يجب ادخال اسم المستخدم',
                               ),
                               TextFormArchive(
-                                emailController: passwordController,
+                                controller: passwordController,
                                 label: 'كلمة المرور',
                                 password: true,
+                                alert: 'يجب ادخال كلمة المرور',
                               ),
                               Visibility(
                                   visible: status is SignInWithEmailLoadingStatus,
@@ -85,7 +86,7 @@ class LoginScreen extends StatelessWidget {
                                   onPressed: () {
                                    if(formKey.currentState!.validate()){
                                      cubit.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text).then((value){
-                                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const MainArchive()));
+                                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MainArchive()));
 
                                      });
 
@@ -228,7 +229,7 @@ class LoginScreen extends StatelessWidget {
     }, listener: (context, status) {
       if (status is SignInWithEmailSuccessStatus) {
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const MainArchive()));
+            MaterialPageRoute(builder: (context) =>  MainArchive()));
       }
     });
   }
@@ -236,42 +237,3 @@ class LoginScreen extends StatelessWidget {
 
 
 
-class TextFormArchive extends StatelessWidget {
-  const TextFormArchive(
-      {Key? key,
-      required this.emailController,
-      required this.label,
-      required this.password})
-      : super(key: key);
-
-  final TextEditingController emailController;
-  final String label;
-  final bool password;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-      child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.teal)),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-            child: TextFormField(
-              validator:(value){
-                if(value == null || value.isEmpty){
-                  return 'يجب ادخال اسم المستخدم و كلمة المرور';
-                }
-                return null;
-              },
-              obscureText: password,
-              controller: emailController,
-              decoration: InputDecoration(
-                label: Text(label),
-                border: InputBorder.none,
-              ),
-            ),
-          )),
-    );
-  }
-}

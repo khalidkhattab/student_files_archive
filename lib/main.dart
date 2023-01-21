@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return BlocConsumer<ArchiveCubit, CubitAssets>(builder: (context, status) {
       final cubit = ArchiveCubit.get(context);
-      return  const Scaffold(
+      return   Scaffold(
         // drawer:
         // Drawer(
         //   child: ListView.builder(
@@ -93,13 +93,12 @@ class _MyHomePageState extends State<MyHomePage> {
         //       }),
         // ),
 
-        body:MainArchive(),
-            //cubit.user!=null?const MainArchive():const LoginScreen(),
+        body: cubit.user!=null? MainArchive():const LoginScreen(),
       );
     }, listener: (context, status) {
       if (status is SignInWithEmailSuccessStatus) {
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const MainArchive()));
+            MaterialPageRoute(builder: (context) =>  MainArchive()));
       }
     });
   }

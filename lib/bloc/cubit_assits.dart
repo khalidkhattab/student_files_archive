@@ -15,3 +15,21 @@ class PageRefresh extends CubitAssets{}
 
 class ShowStudentDataLoadingStatus extends CubitAssets{}
 class ShowStudentDataSuccessStatus extends CubitAssets{}
+
+class ShowCurrentStudentDataLoadingStatus extends CubitAssets{}
+
+class ShowCurrentStudentDataSuccessStatus extends CubitAssets{}
+
+
+class AddNewStudentDataLoadingStatus extends CubitAssets{}
+class AddNewStudentDataSuccessStatus extends CubitAssets{}
+class AddNewStudentDataErrorStatus extends CubitAssets{}
+
+
+class GetStudentDataLoadingStatus extends CubitAssets{}
+class GetStudentDataSuccessStatus extends CubitAssets{}
+class GetStudentDataErrorStatus extends CubitAssets{
+  late final String error;
+
+  GetStudentDataErrorStatus(this.error);
+}

@@ -1,9 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:filearchive/bloc/cubit_assits.dart';
 import 'package:filearchive/model/model.dart';
 import 'package:filearchive/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class ArchiveCubit extends Cubit<CubitAssets> {
   ArchiveCubit() : super(ArchiveInitStatus());
@@ -15,7 +18,31 @@ class ArchiveCubit extends Cubit<CubitAssets> {
   User? user = FirebaseAuth.instance.currentUser;
   List<String> currentList = ['choose...............'];
 
-  List<StudentData> currentClass = [];
+  List<StudentData> dataFromFirebase = [];
+
+  List<StudentData> currentClass = [
+    StudentData(
+        name: 'choose...............',
+        cId: '283021205454',
+        cIdImage: 'assets/images/student.jpg',
+        photo: 'assets/images/student.jpg',
+        sClass: '10-1',
+        nationality: 'kuwait',
+        bDate: Timestamp.now(),
+        guardianName: 'سيداحمد خطاب',
+        guardianPhoto: 'assets/images/moveFile.png',
+        guardianNationality: 'Kuwait',
+        guardianAddress: 'Egypt',
+        guardianJob: 'Father',
+        guardianMaritalStatus: 'Maried',
+        matherName: 'Set Alkel',
+        matherAddress: 'Egypt',
+        matherJob: 'angel',
+        liveWith: 'famialy',
+        reason: 'none'),
+  ];
+
+  List<StudentData> currentStudent = [];
   // String? classItem="Choose Item";
 
   List<String> dropDownItem = [
@@ -97,5 +124,94 @@ class ArchiveCubit extends Cubit<CubitAssets> {
     currentClass =
         studentDataList.where((element) => element.sClass == clsses).toList();
     emit(ShowStudentDataSuccessStatus());
+  }
+
+  showCurrentStudents(String name) {
+    emit(ShowCurrentStudentDataLoadingStatus());
+    currentStudent =
+        currentClass.where((element) => element.name == name).toList();
+    emit(ShowCurrentStudentDataSuccessStatus());
+  }
+
+  addNewStudent() {
+    emit(AddNewStudentDataLoadingStatus());
+    StudentData model = StudentData(
+        name: 'name',
+        cId: 'cId',
+        cIdImage: 'cIdImage',
+        photo: 'photo',
+        sClass: 'sClass',
+        nationality: 'nationality',
+        bDate: Timestamp.now(),
+        guardianName: 'guardianName',
+        guardianPhoto: 'guardianPhoto',
+        guardianNationality: 'guardianNationality',
+        guardianAddress: 'guardianAddress',
+        guardianJob: 'guardianJob',
+        guardianMaritalStatus: 'guardianMaritalStatus',
+        matherName: 'matherName',
+        matherAddress: 'matherAddress',
+        matherJob: 'matherJob',
+        liveWith: 'liveWith',
+        reason: 'reason');
+    FirebaseFirestore.instance
+        .collection('erea')
+        .doc('P9vRJwaBiiqCI022ND7T')
+        .collection('Schools')
+        .doc('9046')
+        .collection('class')
+        .doc('10')
+        .collection('101')
+        .doc('283021205454')
+        .set(model.toMap())
+        .then((value) {
+      emit(AddNewStudentDataSuccessStatus());
+    }).catchError((error){
+      emit(AddNewStudentDataErrorStatus());
+    });
+  }
+
+  getClassData({
+    required String classNum,
+    required String currentClass,
+  }) {
+    emit(GetStudentDataLoadingStatus());
+    StudentData model = StudentData(
+        name: 'name',
+        cId: 'cId',
+        cIdImage: 'cIdImage',
+        photo: 'photo',
+        sClass: 'sClass',
+        nationality: 'nationality',
+        bDate: Timestamp.now(),
+        guardianName: 'guardianName',
+        guardianPhoto: 'guardianPhoto',
+        guardianNationality: 'guardianNationality',
+        guardianAddress: 'guardianAddress',
+        guardianJob: 'guardianJob',
+        guardianMaritalStatus: 'guardianMaritalStatus',
+        matherName: 'matherName',
+        matherAddress: 'matherAddress',
+        matherJob: 'matherJob',
+        liveWith: 'liveWith',
+        reason: 'reason');
+    FirebaseFirestore.instance
+        .collection('erea')
+        .doc('P9vRJwaBiiqCI022ND7T')
+        .collection('Schools')
+        .doc('9046')
+        .collection('class')
+        .doc(classNum)
+        .collection(currentClass)
+        .get()
+        .then((value) {
+      for (var element in value.docs) {
+        dataFromFirebase.add(StudentData.fromJson(element.data()));
+      }
+      emit(GetStudentDataSuccessStatus());
+    }).catchError((error){
+      print(error.toString());
+      emit(GetStudentDataErrorStatus(error.toString()));
+    });
   }
 }

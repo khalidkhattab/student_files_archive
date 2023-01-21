@@ -10,7 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainArchive extends StatelessWidget {
-  const MainArchive({Key? key}) : super(key: key);
+   MainArchive({Key? key}) : super(key: key);
+
+final TextEditingController name=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,11 @@ class MainArchive extends StatelessWidget {
 
     return BlocConsumer<ArchiveCubit, CubitAssets>(
       listener: (context, state) {
+        final cubit = ArchiveCubit.get(context);
         // TODO: implement listener
+        if( state is GetStudentDataSuccessStatus){
+          print(cubit.dataFromFirebase);
+        }
       },
       builder: (context, state) {
         final cubit = ArchiveCubit.get(context);
@@ -133,6 +139,33 @@ class MainArchive extends StatelessWidget {
                     child:siteContent[cubit.currentPage].screen,)
               ],
             ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: (){
+                //cubit.addNewStudent();
+               showDialog(context: context, builder: (context)=>AlertDialog(
+
+                 title:const  Text('اضافة طالب جديد'),
+                 content: Column(
+                   mainAxisAlignment: MainAxisAlignment.start,
+                   mainAxisSize: MainAxisSize.min,
+                   children: [
+                     Row(
+                       children: [
+                         Text('data'),
+                         SizedBox(
+                             width: 450,
+                             child: TextFormArchive(controller: name, label: 'ادخل الاسم', password: false, alert: 'يجب ادخال اسم الطالب'))
+
+                       ],
+                     )
+                   ],
+                 ),
+               ));
+
+              },
+              child: (state is AddNewStudentDataLoadingStatus)?const CircularProgressIndicator():const Icon(Icons.add),
+            ),
+
           ),
         );
       },
