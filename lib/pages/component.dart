@@ -67,6 +67,7 @@ class TextFormArchive extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
       child: Container(
+        height: 60,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.teal)),

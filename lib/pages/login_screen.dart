@@ -41,10 +41,10 @@ class LoginScreen extends StatelessWidget {
           child: Container(
             color: Colors.lightGreenAccent,
             width: kWidth > 1200
-                ? kWidth * .5
-                : kWidth > 1000
-                    ? kWidth * .6
-                    : kWidth * .8,
+                ? kWidth * .7
+                : kWidth > 800
+                    ? kWidth * 0.8
+                    : kWidth * .9,
             height: 450,
             child: Row(
               children: [

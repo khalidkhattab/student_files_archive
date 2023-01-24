@@ -13,16 +13,16 @@ class MainArchive extends StatelessWidget {
    MainArchive({Key? key}) : super(key: key);
 
 final TextEditingController name=TextEditingController();
-
+   List<Map<String, Widget>> drawerScreen = [
+     {'Screen1': const MyHomePage()},
+     {'Screen2': const MyHomePage()},
+     {'Screen3': const MyHomePage()},
+     {'Screen4': const MyHomePage()},
+     {'Screen5': const MyHomePage()}
+   ];
   @override
   Widget build(BuildContext context) {
-    List<Map<String, Widget>> drawerScreen = [
-      {'Screen1': const MyHomePage()},
-      {'Screen2': const MyHomePage()},
-      {'Screen3': const MyHomePage()},
-      {'Screen4': const MyHomePage()},
-      {'Screen5': const MyHomePage()}
-    ];
+
 
     return BlocConsumer<ArchiveCubit, CubitAssets>(
       listener: (context, state) {
@@ -38,9 +38,12 @@ final TextEditingController name=TextEditingController();
         return Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
+           // backgroundColor: SiteColor.bgColor2,
+            drawer: Drawer(),
             body: Row(
               children: [
-                Expanded(
+                SizedBox(
+                    width: 250,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Container(
@@ -66,6 +69,7 @@ final TextEditingController name=TextEditingController();
 
                                         child:ListTile(
                                           onTap: (){
+                                            print(index);
                                             cubit.changePage(index: index);
                                           },
                                           title: sideBarItem[index]['Title'],
@@ -86,6 +90,13 @@ final TextEditingController name=TextEditingController();
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
                                       children: [
+                                        IconButton(onPressed: (){
+                                          cubit.addNewStudent(
+                                            stage: '10',
+                                            sClass: '101',
+                                            cId: '285321549885'
+                                          );
+                                        }, icon:const Icon(Icons.ac_unit_sharp)),
                                         IconButton(
                                             onPressed: () {
                                               cubit.darkModeOn();
@@ -134,14 +145,14 @@ final TextEditingController name=TextEditingController();
                         ),
                       ),
                     )),
-                 Expanded(
-                    flex: 6,
-                    child:siteContent[cubit.currentPage].screen,)
+                 SizedBox(
+                    width: MediaQuery.of(context).size.width-250,
+                    child:sideBarItem[cubit.currentPage]['Screen'],)
               ],
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: (){
-                //cubit.addNewStudent();
+                cubit.addNewClass(stage: '10', collectionPath: '102');
                showDialog(context: context, builder: (context)=>AlertDialog(
 
                  title:const  Text('اضافة طالب جديد'),
@@ -151,13 +162,16 @@ final TextEditingController name=TextEditingController();
                    children: [
                      Row(
                        children: [
-                         Text('data'),
+                         const Text('name'),
                          SizedBox(
                              width: 450,
                              child: TextFormArchive(controller: name, label: 'ادخل الاسم', password: false, alert: 'يجب ادخال اسم الطالب'))
 
                        ],
-                     )
+                     ),
+                     MaterialButton(onPressed: (){
+                       cubit.addNewStudent(stage: '10', sClass: '101', cId: name.text);
+                     }, child: Text('اضافة'),color: SiteColor.sideBarColor,)
                    ],
                  ),
                ));

@@ -133,7 +133,11 @@ class ArchiveCubit extends Cubit<CubitAssets> {
     emit(ShowCurrentStudentDataSuccessStatus());
   }
 
-  addNewStudent() {
+  addNewStudent({
+    required String stage,
+    required String sClass,
+    required String cId,
+  }) {
     emit(AddNewStudentDataLoadingStatus());
     StudentData model = StudentData(
         name: 'name',
@@ -160,13 +164,15 @@ class ArchiveCubit extends Cubit<CubitAssets> {
         .collection('Schools')
         .doc('9046')
         .collection('class')
-        .doc('10')
-        .collection('101')
-        .doc('283021205454')
+        .doc(stage)
+        .collection(sClass)
+        .doc(cId)
         .set(model.toMap())
         .then((value) {
       emit(AddNewStudentDataSuccessStatus());
-    }).catchError((error){
+      getClassData(classNum: '10', currentClass: '101');
+
+    }).catchError((error) {
       emit(AddNewStudentDataErrorStatus());
     });
   }
@@ -176,6 +182,7 @@ class ArchiveCubit extends Cubit<CubitAssets> {
     required String currentClass,
   }) {
     emit(GetStudentDataLoadingStatus());
+    dataFromFirebase = [];
     StudentData model = StudentData(
         name: 'name',
         cId: 'cId',
@@ -203,15 +210,68 @@ class ArchiveCubit extends Cubit<CubitAssets> {
         .collection('class')
         .doc(classNum)
         .collection(currentClass)
-        .get()
-        .then((value) {
-      for (var element in value.docs) {
-        dataFromFirebase.add(StudentData.fromJson(element.data()));
+        .snapshots()
+        .forEach((element) {
+      dataFromFirebase = [];
+      for (var ele in element.docs) {
+        dataFromFirebase.add(StudentData.fromJson(ele.data()));
       }
+    }).then((value) {
       emit(GetStudentDataSuccessStatus());
-    }).catchError((error){
+    }).catchError((error) {
       print(error.toString());
       emit(GetStudentDataErrorStatus(error.toString()));
     });
   }
+  addNewClass({
+    required String stage,
+    required String collectionPath,
+})async{
+    emit(AddNewClassLoadingStatus());
+    FirebaseFirestore.instance
+        .collection('erea')
+        .doc('P9vRJwaBiiqCI022ND7T')
+        .collection('Schools')
+        .doc('9046')
+        .collection('class')
+        .doc(stage).collection(collectionPath).add({
+      'name':'name',
+    }).then((value){
+      emit(AddNewClassSuccessStatus());
+    }).catchError((error){
+      emit(AddNewClassErrorStatus());
+    });
+  }
+
+
+  //test
+  getClass({
+    required String stage,
+    required String collectionPath,
+  }){
+    emit(AddNewClassLoadingStatus());
+    FirebaseFirestore.instance
+        .collection('erea')
+        .doc('P9vRJwaBiiqCI022ND7T')
+        .collection('Schools')
+        .doc('9046')
+        .collection('class')
+        .doc(stage).get();
+  }
+
 }
+
+
+// final int documents = await FirebaseFirestore.instance
+//     .collection('erea')
+//     .doc('P9vRJwaBiiqCI022ND7T')
+//     .collection('Schools')
+//     .doc('9046')
+//     .collection('class')
+//     .doc(stage).collection(collectionPath).snapshots().length;
+//
+// if(documents==0){
+//
+// }else{
+//   emit(AddNewClassErrorStatus());
+// }

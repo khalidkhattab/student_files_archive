@@ -33,3 +33,8 @@ class GetStudentDataErrorStatus extends CubitAssets{
 
   GetStudentDataErrorStatus(this.error);
 }
+
+//add new class
+class AddNewClassLoadingStatus extends CubitAssets{}
+class AddNewClassSuccessStatus extends CubitAssets{}
+class AddNewClassErrorStatus extends CubitAssets{}
