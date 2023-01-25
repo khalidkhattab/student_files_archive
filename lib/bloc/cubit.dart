@@ -76,7 +76,9 @@ class ArchiveCubit extends Cubit<CubitAssets> {
     emit(SignInWithEmailLoadingStatus());
     return FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) => emit(SignInWithEmailSuccessStatus()));
+        .then((value) => emit(SignInWithEmailSuccessStatus())).catchError((error){
+          emit(SignInWithEmailErrorStatus());
+    });
   }
 
   darkModeOn() {

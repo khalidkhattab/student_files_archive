@@ -231,6 +231,17 @@ class LoginScreen extends StatelessWidget {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) =>  MainArchive()));
       }
+      if(status is SignInWithEmailErrorStatus){
+        showDialog(context: context, builder: (context)=> AlertDialog(
+          title:const  Text('تنبيه'),
+          content:const   Text('خطا بتسجيل الدخول'),
+          actions: [
+            MaterialButton(onPressed: (){
+              Navigator.pop(context);
+            }, child:const   Text('موافق'),)
+          ],
+        ));
+      }
     });
   }
 }
