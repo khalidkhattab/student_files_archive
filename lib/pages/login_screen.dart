@@ -23,18 +23,7 @@ class LoginScreen extends StatelessWidget {
       final cubit = ArchiveCubit.get(context);
       final  formKey=GlobalKey<FormState>();
       return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: const Text('Archive file'),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  cubit.darkModeOn();
-                },
-                icon: const Icon(Icons.sunny))
-          ],
-        ),
+
         body: Center(
           // Center is a layout widget. It takes a single child and positions it
           // in the middle of the parent.
@@ -85,10 +74,7 @@ class LoginScreen extends StatelessWidget {
                                   height: 50,
                                   onPressed: () {
                                    if(formKey.currentState!.validate()){
-                                     cubit.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text).then((value){
-                                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MainArchive()));
-
-                                     });
+                                     cubit.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
 
                                    }
                                   },

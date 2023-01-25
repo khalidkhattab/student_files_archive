@@ -38,118 +38,105 @@ final TextEditingController name=TextEditingController();
         return Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
-           // backgroundColor: SiteColor.bgColor2,
-            drawer: Drawer(),
-            body: Row(
-              children: [
-                SizedBox(
-                    width: 250,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Container(
-                        color: SiteColor.bgColor,
-                        child: Column(
-                          children: [
-                            const Card(
-                                child: SizedBox(
-                                    width: double.infinity,
-                                    child: Center(
-                                        child: Text(
-                                      'ملفاتي',
-                                      style: TextStyle(fontSize: 20),
-                                    )))),
-                            const SizedBox(height: 100,),
-                            Expanded(
-                                child:  SizedBox(
-                                  child: ListView.builder(
-                                      itemCount: sideBarItem.length,
-                                      itemBuilder: (context, index){
-                                    return SizedBox(
-                                        height: 80,
+            appBar: AppBar(
+              actions: [
+                IconButton(onPressed: (){
+                  cubit.addNewStudent(
+                      stage: '10',
+                      sClass: '101',
+                      cId: '285321549885'
+                  );
+                }, icon:const Icon(Icons.ac_unit_sharp)),
+                IconButton(
+                    onPressed: () {
+                      cubit.darkModeOn();
+                    },
+                    icon: const Icon(Icons.sunny)),
+                IconButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) =>
+                              SiteAlert(
+                                  title: 'تنبيه',
+                                  subject: const Text(
+                                      'هل تريد تسجيل الخروج'),
+                                  action: [
+                                    MaterialButton(
+                                      onPressed: () {
+                                        FirebaseAuth
+                                            .instance
+                                            .signOut()
+                                            .then((value) => Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                const LoginScreen())));
+                                      },
+                                      color: Colors.red,
+                                      child: const Text(
+                                          'نعم'),
+                                    ),
 
-                                        child:ListTile(
-                                          onTap: (){
-                                            print(index);
-                                            cubit.changePage(index: index);
-                                          },
-                                          title: sideBarItem[index]['Title'],
-                                          leading: sideBarItem[index]['Icon'] ,
-                                            minLeadingWidth:0,
-
-                                          trailing:Visibility(
-                                              visible:kWidth>1500 ,
-                                              child:  const Icon(Icons.arrow_forward_ios))),
-                                        );
-
-                                  }),
-                            )),
-                            Card(
-                                child: SizedBox(
-                                    width: double.infinity,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        IconButton(onPressed: (){
-                                          cubit.addNewStudent(
-                                            stage: '10',
-                                            sClass: '101',
-                                            cId: '285321549885'
-                                          );
-                                        }, icon:const Icon(Icons.ac_unit_sharp)),
-                                        IconButton(
-                                            onPressed: () {
-                                              cubit.darkModeOn();
-                                            },
-                                            icon: const Icon(Icons.sunny)),
-                                        IconButton(
-                                            onPressed: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      SiteAlert(
-                                                          title: 'تنبيه',
-                                                          subject: const Text(
-                                                              'هل تريد تسجيل الخروج'),
-                                                          action: [
-                                                            MaterialButton(
-                                                              onPressed: () {
-                                                                FirebaseAuth
-                                                                    .instance
-                                                                    .signOut()
-                                                                    .then((value) => Navigator.pushReplacement(
-                                                                        context,
-                                                                        MaterialPageRoute(
-                                                                            builder: (context) =>
-                                                                                const LoginScreen())));
-                                                              },
-                                                              color: Colors.red,
-                                                              child: const Text(
-                                                                  'نعم'),
-                                                            ),
-
-                                                            MaterialButton(
-                                                              onPressed: () {
-                                                                Navigator.pop(context);
-                                                              },
-                                                              color: Colors.green,
-                                                              child:const  Text(
-                                                                  'لا'),
-                                                            ),
-                                                          ]));
-                                            },
-                                            icon: const Icon(Icons.exit_to_app))
-                                      ],
-                                    ))),
-                          ],
-                        ),
-                      ),
-                    )),
-                 SizedBox(
-                    width: MediaQuery.of(context).size.width-250,
-                    child:sideBarItem[cubit.currentPage]['Screen'],)
+                                    MaterialButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      color: Colors.green,
+                                      child:const  Text(
+                                          'لا'),
+                                    ),
+                                  ]));
+                    },
+                    icon: const Icon(Icons.exit_to_app))
               ],
             ),
+           // backgroundColor: SiteColor.bgColor2,
+            drawer: Drawer(
+              child: Container(
+                color: SiteColor.bgColor,
+                child: Column(
+                  children: [
+                    const Card(
+                        child: SizedBox(
+                            width: double.infinity,
+                            child: Center(
+                                child: Text(
+                                  'ملفاتي',
+                                  style: TextStyle(fontSize: 20),
+                                )))),
+                    const SizedBox(height: 30,),
+                    Expanded(
+                        child:  SizedBox(
+                          child: ListView.builder(
+                              itemCount: sideBarItem.length,
+                              itemBuilder: (context, index){
+                                return SizedBox(
+                                  height: 50,
+
+                                  child:ListTile(
+                                      onTap: (){
+                                        print(index);
+                                        cubit.changePage(index: index);
+                                        Navigator.pop(context);
+                                      },
+                                      title: sideBarItem[index]['Title'],
+                                      leading: sideBarItem[index]['Icon'] ,
+                                      minLeadingWidth:0,
+
+                                      trailing:Visibility(
+                                          visible:kWidth>1500 ,
+                                          child:  const Icon(Icons.arrow_forward_ios))),
+                                );
+
+                              }),
+                        )),
+
+                  ],
+                ),
+              ),
+            ),
+            body:sideBarItem[cubit.currentPage]['Screen'],
             floatingActionButton: FloatingActionButton(
               onPressed: (){
                 cubit.addNewClass(stage: '10', collectionPath: '102');
@@ -189,3 +176,113 @@ final TextEditingController name=TextEditingController();
 
 
 
+// Row(
+// children: [
+// SizedBox(
+// width: 250,
+// child: Padding(
+// padding: const EdgeInsets.symmetric(vertical: 8),
+// child: Container(
+// color: SiteColor.bgColor,
+// child: Column(
+// children: [
+// const Card(
+// child: SizedBox(
+// width: double.infinity,
+// child: Center(
+// child: Text(
+// 'ملفاتي',
+// style: TextStyle(fontSize: 20),
+// )))),
+// const SizedBox(height: 100,),
+// Expanded(
+// child:  SizedBox(
+// child: ListView.builder(
+// itemCount: sideBarItem.length,
+// itemBuilder: (context, index){
+// return SizedBox(
+// height: 80,
+//
+// child:ListTile(
+// onTap: (){
+// print(index);
+// cubit.changePage(index: index);
+// },
+// title: sideBarItem[index]['Title'],
+// leading: sideBarItem[index]['Icon'] ,
+// minLeadingWidth:0,
+//
+// trailing:Visibility(
+// visible:kWidth>1500 ,
+// child:  const Icon(Icons.arrow_forward_ios))),
+// );
+//
+// }),
+// )),
+// Card(
+// child: SizedBox(
+// width: double.infinity,
+// child: Row(
+// mainAxisAlignment:
+// MainAxisAlignment.spaceAround,
+// children: [
+// IconButton(onPressed: (){
+// cubit.addNewStudent(
+// stage: '10',
+// sClass: '101',
+// cId: '285321549885'
+// );
+// }, icon:const Icon(Icons.ac_unit_sharp)),
+// IconButton(
+// onPressed: () {
+// cubit.darkModeOn();
+// },
+// icon: const Icon(Icons.sunny)),
+// IconButton(
+// onPressed: () {
+// showDialog(
+// context: context,
+// builder: (context) =>
+// SiteAlert(
+// title: 'تنبيه',
+// subject: const Text(
+// 'هل تريد تسجيل الخروج'),
+// action: [
+// MaterialButton(
+// onPressed: () {
+// FirebaseAuth
+//     .instance
+//     .signOut()
+//     .then((value) => Navigator.pushReplacement(
+// context,
+// MaterialPageRoute(
+// builder: (context) =>
+// const LoginScreen())));
+// },
+// color: Colors.red,
+// child: const Text(
+// 'نعم'),
+// ),
+//
+// MaterialButton(
+// onPressed: () {
+// Navigator.pop(context);
+// },
+// color: Colors.green,
+// child:const  Text(
+// 'لا'),
+// ),
+// ]));
+// },
+// icon: const Icon(Icons.exit_to_app))
+// ],
+// ))),
+// ],
+// ),
+// ),
+// )),
+// SizedBox(
+// width: MediaQuery.of(context).size.width-250,
+// child:sideBarItem[cubit.currentPage]['Screen'],)
+// ],
+// )

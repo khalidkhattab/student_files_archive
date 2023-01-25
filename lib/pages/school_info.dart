@@ -28,9 +28,7 @@ class SchoolInfo extends StatelessWidget {
               [
                 const Text('بيانات المدرسة', style: TextStyle(fontSize: 30),),
                 Row(children: const [
-                  ExpandContainer(title: ' الفصول',body: '22',),
-                  ExpandContainer(title: ' الطلاب',body: '670',),ExpandContainer(title: 'الملفات '
-                      '',body: '30',),
+
                 ],),
 ]
             ),
