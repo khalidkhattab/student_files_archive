@@ -1,4 +1,3 @@
-import 'package:filearchive/bloc/cubit.dart';
 import 'package:filearchive/pages/component.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +21,7 @@ class AddStudent extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
              mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const Text(
@@ -247,30 +246,7 @@ class AddStudent extends StatelessWidget {
                                         password: false,
                                         alert: 'ادخل الرقم المدني'),
                                   ),
-                                  Container(
-                                    width: 200,
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(color: Colors.teal)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: DropdownButton<String>(
-                                          value: item3,
-                                          items: ArchiveCubit().currentClass.map((e) {
-                                            return DropdownMenuItem<String>(
-                                              value: e.name,
-                                              child: Text(e.name),
-                                            );
-                                          }).toList(),
-                                          onChanged: (val) {
-                                            // item3 = val;
-                                            // cubit.showCurrentStudents(item3!);
-                                          }),
-                                    ),
 
-                            
-                                  ),
                                   SizedBox(
                                     width: 400,
                                     child: TextFormArchive(

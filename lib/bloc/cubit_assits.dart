@@ -38,3 +38,7 @@ class GetStudentDataErrorStatus extends CubitAssets{
 class AddNewClassLoadingStatus extends CubitAssets{}
 class AddNewClassSuccessStatus extends CubitAssets{}
 class AddNewClassErrorStatus extends CubitAssets{}
+
+class GetClassroomLoadingStatus extends CubitAssets{}
+class GetClassroomSuccessStatus extends CubitAssets{}
+class GetClassroomErrorStatus extends CubitAssets{}

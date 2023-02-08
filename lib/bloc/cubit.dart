@@ -1,49 +1,30 @@
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:filearchive/bloc/cubit_assits.dart';
-import 'package:filearchive/model/model.dart';
 import 'package:filearchive/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class ArchiveCubit extends Cubit<CubitAssets> {
   ArchiveCubit() : super(ArchiveInitStatus());
   static ArchiveCubit get(context) => BlocProvider.of(context);
+
+
   bool darkMode = true;
   bool onBoardingDone = false;
   int currentPage = 0;
   bool onBoardingLess = true;
   User? user = FirebaseAuth.instance.currentUser;
+
+  List<String> allClass = [];
+
+  //define current stage
+  String stage = '10';
+
   List<String> currentList = ['choose...............'];
 
   List<StudentData> dataFromFirebase = [];
 
-  List<StudentData> currentClass = [
-    StudentData(
-        name: 'choose...............',
-        cId: '283021205454',
-        cIdImage: 'assets/images/student.jpg',
-        photo: 'assets/images/student.jpg',
-        sClass: '10-1',
-        nationality: 'kuwait',
-        bDate: Timestamp.now(),
-        guardianName: 'سيداحمد خطاب',
-        guardianPhoto: 'assets/images/moveFile.png',
-        guardianNationality: 'Kuwait',
-        guardianAddress: 'Egypt',
-        guardianJob: 'Father',
-        guardianMaritalStatus: 'Maried',
-        matherName: 'Set Alkel',
-        matherAddress: 'Egypt',
-        matherJob: 'angel',
-        liveWith: 'famialy',
-        reason: 'none'),
-  ];
 
-  List<StudentData> currentStudent = [];
-  // String? classItem="Choose Item";
 
   List<String> dropDownItem = [
     'العاشر',
@@ -52,16 +33,10 @@ class ArchiveCubit extends Cubit<CubitAssets> {
     'الثاني عشر ادبي',
     'الثاني عشر علمي'
   ];
-  // String? item = 'العاشر';
-  // String? item2 ='10-1';
+
 
   List<String> classTen = [
     'choose...............',
-    '10-1',
-    '10-2',
-    '10-3',
-    '10-4',
-    '10-5'
   ];
   List<String> classElevenD = [
     'choose...............',
@@ -71,15 +46,7 @@ class ArchiveCubit extends Cubit<CubitAssets> {
     '11د4'
   ];
 
-  Future signInWithEmailAndPassword(
-      {required String email, required String password}) {
-    emit(SignInWithEmailLoadingStatus());
-    return FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) => emit(SignInWithEmailSuccessStatus())).catchError((error){
-          emit(SignInWithEmailErrorStatus());
-    });
-  }
+
 
   darkModeOn() {
     darkMode = !darkMode;
@@ -111,28 +78,17 @@ class ArchiveCubit extends Cubit<CubitAssets> {
     emit(PageRefresh());
   }
 
-  currentDropDownList(String item) {
-    if (item == 'العاشر') {
-      currentList = classTen;
-    }
-    if (item == 'الحادي عشر ادبي') {
-      currentList = classElevenD;
-    }
-    emit(PageRefresh());
-  }
 
-  showStudent(String clsses) {
-    emit(ShowStudentDataLoadingStatus());
-    currentClass =
-        studentDataList.where((element) => element.sClass == clsses).toList();
-    emit(ShowStudentDataSuccessStatus());
-  }
 
-  showCurrentStudents(String name) {
-    emit(ShowCurrentStudentDataLoadingStatus());
-    currentStudent =
-        currentClass.where((element) => element.name == name).toList();
-    emit(ShowCurrentStudentDataSuccessStatus());
+  Future signInWithEmailAndPassword(
+      {required String email, required String password}) {
+    emit(SignInWithEmailLoadingStatus());
+    return FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) => emit(SignInWithEmailSuccessStatus()))
+        .catchError((error) {
+      emit(SignInWithEmailErrorStatus());
+    });
   }
 
   addNewStudent({
@@ -142,11 +98,11 @@ class ArchiveCubit extends Cubit<CubitAssets> {
   }) {
     emit(AddNewStudentDataLoadingStatus());
     StudentData model = StudentData(
-        name: 'name',
-        cId: 'cId',
+        name: 'khalid khattab',
+        cId: cId,
         cIdImage: 'cIdImage',
         photo: 'photo',
-        sClass: 'sClass',
+        sClass: sClass,
         nationality: 'nationality',
         bDate: Timestamp.now(),
         guardianName: 'guardianName',
@@ -173,7 +129,6 @@ class ArchiveCubit extends Cubit<CubitAssets> {
         .then((value) {
       emit(AddNewStudentDataSuccessStatus());
       getClassData(classNum: '10', currentClass: '101');
-
     }).catchError((error) {
       emit(AddNewStudentDataErrorStatus());
     });
@@ -185,25 +140,6 @@ class ArchiveCubit extends Cubit<CubitAssets> {
   }) {
     emit(GetStudentDataLoadingStatus());
     dataFromFirebase = [];
-    StudentData model = StudentData(
-        name: 'name',
-        cId: 'cId',
-        cIdImage: 'cIdImage',
-        photo: 'photo',
-        sClass: 'sClass',
-        nationality: 'nationality',
-        bDate: Timestamp.now(),
-        guardianName: 'guardianName',
-        guardianPhoto: 'guardianPhoto',
-        guardianNationality: 'guardianNationality',
-        guardianAddress: 'guardianAddress',
-        guardianJob: 'guardianJob',
-        guardianMaritalStatus: 'guardianMaritalStatus',
-        matherName: 'matherName',
-        matherAddress: 'matherAddress',
-        matherJob: 'matherJob',
-        liveWith: 'liveWith',
-        reason: 'reason');
     FirebaseFirestore.instance
         .collection('erea')
         .doc('P9vRJwaBiiqCI022ND7T')
@@ -212,6 +148,7 @@ class ArchiveCubit extends Cubit<CubitAssets> {
         .collection('class')
         .doc(classNum)
         .collection(currentClass)
+        .orderBy('name', descending: false)
         .snapshots()
         .forEach((element) {
       dataFromFirebase = [];
@@ -221,14 +158,14 @@ class ArchiveCubit extends Cubit<CubitAssets> {
     }).then((value) {
       emit(GetStudentDataSuccessStatus());
     }).catchError((error) {
-      print(error.toString());
       emit(GetStudentDataErrorStatus(error.toString()));
     });
   }
+
   addNewClass({
     required String stage,
     required String collectionPath,
-})async{
+  }) async {
     emit(AddNewClassLoadingStatus());
     FirebaseFirestore.instance
         .collection('erea')
@@ -236,44 +173,129 @@ class ArchiveCubit extends Cubit<CubitAssets> {
         .collection('Schools')
         .doc('9046')
         .collection('class')
-        .doc(stage).collection(collectionPath).add({
-      'name':'name',
-    }).then((value){
+        .doc(stage)
+        .collection(collectionPath)
+        .add({
+      'name': 'name',
+    }).then((value) {
       emit(AddNewClassSuccessStatus());
-    }).catchError((error){
+    }).catchError((error) {
       emit(AddNewClassErrorStatus());
     });
   }
 
 
-  //test
-  getClass({
-    required String stage,
-    required String collectionPath,
-  }){
-    emit(AddNewClassLoadingStatus());
+
+  getClassDataGet({
+    required String classNum,
+    required String currentClass,
+  }) {
+    emit(GetStudentDataLoadingStatus());
+    dataFromFirebase = [];
     FirebaseFirestore.instance
         .collection('erea')
         .doc('P9vRJwaBiiqCI022ND7T')
         .collection('Schools')
         .doc('9046')
         .collection('class')
-        .doc(stage).get();
+        .doc(classNum)
+        .collection(currentClass)
+        .orderBy('name', descending: false)
+        .get()
+        .then((value) {
+      dataFromFirebase = [];
+      for (var element in value.docs) {
+        dataFromFirebase.add(StudentData.fromJson(element.data()));
+      }
+      emit(GetStudentDataSuccessStatus());
+    }).catchError((error) {
+      emit(GetStudentDataErrorStatus(error));
+    });
   }
 
+  allClassTitle() {
+    allClass = [];
+    for (var element in dataFromFirebase) {
+      allClass.add(element.sClass);
+    }
+  }
+
+  currentStage({required String lStage})  {
+    if (lStage == "العاشر") {
+      stage = '10';
+    } else if (lStage == "الحادي عشر ادبي") {
+      stage = '11D';
+    } else if (lStage == "الحادي عشر علمي") {
+      stage = '11A';
+    } else if (lStage == "الثاني عشر ادبي") {
+      stage = '12D';
+    } else if (lStage == "الثاني عشر علمي") {
+      stage = '12A';
+    }
+    getClassrooms(lClass: stage);
+  }
+
+  addClassroom({required String lClass, required List classRoom}) {
+    FirebaseFirestore.instance
+        .collection('erea')
+        .doc('P9vRJwaBiiqCI022ND7T')
+        .collection('Schools')
+        .doc('9046')
+        .collection('class')
+        .doc(lClass)
+        .set({'classroom': FieldValue.arrayUnion(classRoom)}).then(
+            (value) => emit(PageRefresh()));
+  }
+
+  upDateClassroom({required String lClass, required List classRoom}) {
+    FirebaseFirestore.instance
+        .collection('erea')
+        .doc('P9vRJwaBiiqCI022ND7T')
+        .collection('Schools')
+        .doc('9046')
+        .collection('class')
+        .doc(lClass)
+        .update({'classroom': FieldValue.arrayUnion(classRoom)}).then(
+            (value) => emit(PageRefresh()));
+  }
+
+  deleteClassroom({required String lClass, required List classRoom}) {
+    FirebaseFirestore.instance
+        .collection('erea')
+        .doc('P9vRJwaBiiqCI022ND7T')
+        .collection('Schools')
+        .doc('9046')
+        .collection('class')
+        .doc(lClass)
+        .update({'classroom': FieldValue.arrayRemove(classRoom)}).then(
+            (value) => emit(PageRefresh()));
+  }
+
+
+  getClassrooms({
+    required String lClass
+}) {
+    emit(GetStudentDataLoadingStatus());
+    FirebaseFirestore.instance
+        .collection('erea')
+        .doc('P9vRJwaBiiqCI022ND7T')
+        .collection('Schools')
+        .doc('9046')
+        .collection('class')
+        .doc(lClass)
+        .get()
+        .then((value) {
+      currentList = [
+        'choose...............',
+      ];
+      for( var element in value.data()!['classroom']){
+        currentList.add(element);
+      }
+      print(currentList);
+      emit(GetClassroomSuccessStatus());
+    }).catchError((onError) {
+      print(onError.toString());
+      emit(GetClassroomErrorStatus());
+    });
+  }
 }
-
-
-// final int documents = await FirebaseFirestore.instance
-//     .collection('erea')
-//     .doc('P9vRJwaBiiqCI022ND7T')
-//     .collection('Schools')
-//     .doc('9046')
-//     .collection('class')
-//     .doc(stage).collection(collectionPath).snapshots().length;
-//
-// if(documents==0){
-//
-// }else{
-//   emit(AddNewClassErrorStatus());
-// }

@@ -30,12 +30,12 @@ List<Map<String, String>> onBoarding=[
 
 ];
 
-List<Map<String, Widget?>> sideBarItem=[
-  {'Title':const Text('الرئيسية'),'Icon':const Icon(Icons.home),'Screen': DashBoard() },
-  {'Title':const Text('بيانات المدرسة'),'Icon':const Icon(Icons.list),'Screen':const SchoolInfo() },
-  {'Title':const Text('اضافة طالب'),'Icon':const Icon(Icons.list),'Screen': AddStudent() },
-  {'Title':const Text('نقل ملفات'),'Icon':const Icon(Icons.move_to_inbox),'Screen':const MoveFile() },
-  {'Title':const Text('تعديل ملف'),'Icon':const Icon(Icons.edit),'Screen':const EditFile() },
-  {'Title':const Text('استعراض ملف'),'Icon':const Icon(Icons.folder),'Screen':const BrowseFile() },
+List<Map<String, dynamic>> sideBarItem=[
+  {'Title':const Text('الرئيسية',style: TextStyle(fontSize: 15),),'Icon':const Icon(Icons.home),'Screen': DashBoard(),'position':0},
+  {'Title':const Text('بيانات المدرسة',style: TextStyle(fontSize: 15)),'Icon':const Icon(Icons.list),'Screen': SchoolInfo(),'position':1 },
+  {'Title':const Text('اضافة طالب',style: TextStyle(fontSize: 15)),'Icon':const Icon(Icons.add),'Screen': AddStudent(),'position':2 },
+  {'Title':const Text('نقل ملفات',style: TextStyle(fontSize: 15)),'Icon':const Icon(Icons.move_to_inbox),'Screen':const MoveFile(),'position':3 },
+  {'Title':const Text('تعديل ملف',style: TextStyle(fontSize: 15)),'Icon':const Icon(Icons.edit),'Screen':const EditFile() ,'position':4},
+  {'Title':const Text('استعراض ملف',style: TextStyle(fontSize: 15)),'Icon':const Icon(Icons.folder),'Screen':const BrowseFile(),'position':5 },
 
 ];
